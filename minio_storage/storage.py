@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import time
 import datetime
 import mimetypes
 from logging import getLogger
@@ -182,7 +183,7 @@ class MinioStorage(Storage):
         # type: (str) -> datetime.datetime
         try:
             info = self.client.stat_object(self.bucket_name, name)
-            return datetime.datetime.fromtimestamp(info.last_modified)
+            return datetime.datetime.fromtimestamp(time.mktime(info.last_modified))
         except ResponseError as error:
             logger.warn(error)
             raise IOError(
